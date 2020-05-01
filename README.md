@@ -10,18 +10,18 @@ There are two parts:
 * `emacs-integration`, an HTTP server
 
 `reintegrate.el` in the remote Emacs sends HTTP requests to
-emacs-integration running on your local machine through a forwarded
+`emacs-integration` running on your local machine through a forwarded
 port.
 
 ## Quickstart
 
 On your local machine:
 
-3. Build the integration server (requires Go):
+1. Build the integration server (requires Go):
 
         (cd emacs-integration && go install .)  # Installs into $HOME/go/bin
 
-4. Assuming your local machine uses systemd, copy the service and
+2. Assuming your local machine uses systemd, copy the service and
    socket files into `~/.config/systemd/user`:
 
          cp *.socket *.service ~/.config/systemd/user
