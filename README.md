@@ -17,16 +17,17 @@ port.
 
 On your local machine:
 
-1. Build the integration server (requires Go):
+1. Install xsel (used to interact with clipboard).
+2. Build the integration server (requires Go):
 
         (cd emacs-integration && go install .)  # Installs into $HOME/go/bin
 
-2. Assuming your local machine uses systemd, copy the service and
+3. Assuming your local machine uses systemd, copy the service and
    socket files into `~/.config/systemd/user`:
 
          cp *.socket *.service ~/.config/systemd/user
 
-3. Enable systemd socket activation:
+4. Enable systemd socket activation:
 
          systemctl --user enable --now emacs-integration.socket
 
