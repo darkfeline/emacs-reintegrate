@@ -38,7 +38,9 @@ On your remote machine:
 1. Add `reintegrate.el` to your `load-path`.
 2. Add to your `init.el`:
 
-        (when (getenv "SSH_TTY") (reintegrate))
+        (when (getenv "SSH_TTY")
+          (require 'reintegrate)
+          (reintegrate))
 
 When using:
 
