@@ -19,7 +19,7 @@ var (
 )
 
 func main() {
-	log.SetPrefix("emacsp: ")
+	log.SetPrefix("emacs-integration: ")
 	var listener net.Listener
 	ls, err := activation.Listeners()
 	if err != nil {
