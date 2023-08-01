@@ -66,7 +66,6 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 			serverError(w, "Error getting clipboard: %s", err)
 			return
 		}
-		log.Printf("Got string: %q", s)
 		io.WriteString(w, s)
 	case "PUT":
 		log.Printf("PUT /clipboard")
@@ -75,6 +74,7 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 			serverError(w, "Error reading body: %s", err)
 			return
 		}
+		log.Printf("Got string: %q", s)
 		if err := setClipboard(s); err != nil {
 			serverError(w, "Error setting clipboard: %s", err)
 			return
