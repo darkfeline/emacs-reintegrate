@@ -74,7 +74,6 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 			serverError(w, "Error reading body: %s", err)
 			return
 		}
-		log.Printf("Got string: %q", s)
 		if err := setClipboard(s); err != nil {
 			serverError(w, "Error setting clipboard: %s", err)
 			return
@@ -85,12 +84,11 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func requestBody(r *http.Request) (string, error) {
-	b := make([]byte, r.ContentLength)
-	l, err := r.Body.Read(b)
-	if err != nil && err != io.EOF {
+	var b strings.Builder
+	if _, err := io.Copy(&b, r.Body); err != nil {		
 		return "", fmt.Errorf("read request body: %w", err)
 	}
-	return string(b[:l]), nil
+	return b.String(), nil
 }
 
 func serverError(w http.ResponseWriter, s string, a ...interface{}) {
