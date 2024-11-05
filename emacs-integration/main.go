@@ -91,6 +91,7 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GET /health")
 	io.WriteString(w, "okay")
 }
 
