@@ -22,6 +22,7 @@ var (
 func main() {
 	log.SetPrefix("emacs-integration: ")
 
+	flag.Parse()
 	if _, ok := handlers[*handlerName]; !ok {
 		log.Fatal("Unknown handler type %q", handlerName)
 	}
