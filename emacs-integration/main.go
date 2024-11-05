@@ -36,6 +36,7 @@ func main() {
 
 	http.HandleFunc("/browser", handleBrowser)
 	http.HandleFunc("/clipboard", handleClipboard)
+	http.HandleFunc("/health", handleHealth)
 	log.Fatal(http.Serve(listener, nil))
 }
 
@@ -81,6 +82,10 @@ func handleClipboard(w http.ResponseWriter, r *http.Request) {
 	default:
 		badMethod(w, "GET", "PUT")
 	}
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "okay")
 }
 
 func requestBody(r *http.Request) (string, error) {

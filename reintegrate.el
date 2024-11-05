@@ -71,6 +71,12 @@ NEW-WINDOW is ignored."
         (search-forward "\n\n")
         (decode-coding-string (buffer-substring-no-properties (point) (point-max)) reintegrate-encoding)))))
 
+;;;###autoload
+(defun reintegrate-check-health ()
+  "Check health of remote integration server."
+  (interactive)
+  (message "Got: %s" (url-retrieve-synchronously (reintegrate--rpc-path reintegrate-host "/health") t t)))
+
 (defun reintegrate--rpc-path (host path)
   "Get URL for RPC at HOST and PATH."
   (format "http://%s%s" host path))
