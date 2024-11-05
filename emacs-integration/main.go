@@ -16,10 +16,16 @@ import (
 
 var (
 	port = flag.String("address", "127.0.0.1:9999", "Proxy listen address.")
+	handlerName = flag.String("handler", "x", "Handler type (x or wayland)")
 )
 
 func main() {
 	log.SetPrefix("emacs-integration: ")
+
+	if _, ok := handlers[*handlerName]; !ok {
+		log.Fatal("Unknown handler type %q", handlerName)
+	}
+
 	var listener net.Listener
 	ls, err := activation.Listeners()
 	if err != nil {
@@ -113,6 +119,31 @@ func badMethod(w http.ResponseWriter, method ...string) {
 }
 
 func getClipboard() (string, error) {
+	return getHandler().getClipboard()
+}
+
+func setClipboard(s string) error {
+	return getHandler().setClipboard(s)
+}
+
+func getHandler() handler {
+	// handlerName is validated in main function.
+	return handlers[*handlerName]
+}
+
+var handlers = map[string]handler{
+	"x": xHandler{},
+	"wayland": waylandHandler{},
+}
+
+type handler interface {
+	getClipboard() (string, error)
+	setClipboard(s string) error
+}
+
+type xHandler struct{}
+
+func (xHandler) getClipboard() (string, error) {
 	c := exec.Command("xsel", "-b", "-o")
 	o, err := c.Output()
 	if err != nil {
@@ -122,8 +153,26 @@ func getClipboard() (string, error) {
 
 }
 
-func setClipboard(s string) error {
+func (xHandler) setClipboard(s string) error {
 	c := exec.Command("xsel", "-b", "-i")
+	c.Stdin = strings.NewReader(s)
+	return c.Run()
+}
+
+type waylandHandler struct{}
+
+func (waylandHandler) getClipboard() (string, error) {
+	c := exec.Command("wl-paste")
+	o, err := c.Output()
+	if err != nil {
+		return "", err
+	}
+	return string(o), nil
+
+}
+
+func (waylandHandler) setClipboard(s string) error {
+	c := exec.Command("wl-copy")
 	c.Stdin = strings.NewReader(s)
 	return c.Run()
 }
