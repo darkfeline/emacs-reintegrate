@@ -164,7 +164,7 @@ func (xHandler) setClipboard(s string) error {
 type waylandHandler struct{}
 
 func (waylandHandler) getClipboard() (string, error) {
-	c := exec.Command("wl-paste")
+	c := exec.Command("wl-paste", "-n")
 	o, err := c.Output()
 	if err != nil {
 		return "", err
