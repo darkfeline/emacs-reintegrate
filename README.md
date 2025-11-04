@@ -17,7 +17,11 @@ port.
 
 On your local machine:
 
-1. Install xsel (used to interact with clipboard).
+1. Install clipboard utilities:
+
+   * For X, install xsel.
+   * For Wayland, install wl-clipboard.
+
 2. Build the integration server (requires Go):
 
         (cd emacs-integration && go install .)  # Installs into $HOME/go/bin
@@ -27,7 +31,10 @@ On your local machine:
 
          cp *.socket *.service ~/.config/systemd/user
 
-4. Enable systemd socket activation:
+4. If you're using Wayland, edit the service file and replace the `ExecStart`
+   line with the commented one.
+
+5. Enable systemd socket activation:
 
          systemctl --user enable --now emacs-integration.socket
 

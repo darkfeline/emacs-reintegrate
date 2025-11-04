@@ -4,3 +4,5 @@ Description=Emacs remote integration service
 [Service]
 Environment=DISPLAY=:0
 ExecStart=%h/go/bin/emacs-integration
+# For Wayland, use the following line
+#ExecStart=%h/go/bin/emacs-integration -handler wayland
