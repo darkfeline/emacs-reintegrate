@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	port = flag.String("address", "127.0.0.1:9999", "Proxy listen address.")
+	port        = flag.String("address", "127.0.0.1:9999", "Proxy listen address.")
 	handlerName = flag.String("handler", "x", "Handler type (x or wayland)")
 )
 
@@ -98,7 +98,7 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 
 func requestBody(r *http.Request) (string, error) {
 	var b strings.Builder
-	if _, err := io.Copy(&b, r.Body); err != nil {		
+	if _, err := io.Copy(&b, r.Body); err != nil {
 		return "", fmt.Errorf("read request body: %w", err)
 	}
 	return b.String(), nil
@@ -134,7 +134,7 @@ func getHandler() handler {
 }
 
 var handlers = map[string]handler{
-	"x": xHandler{},
+	"x":       xHandler{},
 	"wayland": waylandHandler{},
 }
 
@@ -164,7 +164,7 @@ func (xHandler) setClipboard(s string) error {
 type waylandHandler struct{}
 
 func (waylandHandler) getClipboard() (string, error) {
-	c := exec.Command("wl-paste", "-n")
+	c := exec.Command("wl-paste", "--type", "TEXT", "-n")
 	o, err := c.Output()
 	if err != nil {
 		return "", err
@@ -174,7 +174,7 @@ func (waylandHandler) getClipboard() (string, error) {
 }
 
 func (waylandHandler) setClipboard(s string) error {
-	c := exec.Command("wl-copy")
+	c := exec.Command("wl-copy", "--type", "TEXT")
 	c.Stdin = strings.NewReader(s)
 	return c.Run()
 }
